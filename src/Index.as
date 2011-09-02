@@ -2,6 +2,7 @@ package {
 	import jp.progression.casts.CastDocument;
 	import jp.progression.config.WebConfig;
 	import jp.progression.debug.Debugger;
+	import scenes.IndexScene;
 
 	
 	/**
