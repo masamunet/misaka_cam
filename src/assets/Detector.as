@@ -11,6 +11,7 @@ package assets
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
 	import jp.progression.casts.CastSprite;
+	import jp.progression.commands.display.AddChild;
 	import jp.progression.commands.display.RemoveAllChildren;
 	
 	public class Detector extends CastSprite
@@ -24,6 +25,7 @@ package assets
 		private var _bitmap:Bitmap;
 		
 		private var _rect:Rectangle;
+		private var _faceWarp:FaceWarp;
 		
 		public function Detector(video:Video, initObject:Object=null)
 		{
@@ -40,13 +42,18 @@ package assets
 			_bitmapData = new BitmapData(_video.width * _SCALE, _video.height * _SCALE);
 			_bitmap = new Bitmap(_bitmapData);
 			
+			_faceWarp = new FaceWarp(_bitmapData);
+			
 			_detector = new ObjectDetector();
 			var options:ObjectDetectorOptions = new ObjectDetectorOptions();
-			options.min_size = 50;
+			options.min_size = 40;
 			_detector.options = options;
 			_detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, _onCompleteHandler);
 			_detector.addEventListener(ObjectDetectorEvent.HAARCASCADES_LOAD_COMPLETE, _onLoadComplateHandler);
 			_detector.loadHaarCascades("face.zip");
+			addCommand(
+				new AddChild(this, _faceWarp)
+			);
 		}
 
 		private function _onLoadComplateHandler(event:ObjectDetectorEvent):void
@@ -57,6 +64,7 @@ package assets
 		
 		private function _onEnterFrameHandler(e:Event):void
 		{
+			removeEventListener(Event.ENTER_FRAME, _onEnterFrameHandler);
 			_bitmapData.draw(_video, _matrix);
 			_detector.detect(_bitmap);
 		}
@@ -65,6 +73,7 @@ package assets
 		{
 			if(event.rects.length > 0){
 				_rect = event.rects[0] as Rectangle;
+				/*
 				graphics.clear();
 				graphics.lineStyle(0, 0xFFFF00);
 				graphics.drawRect(
@@ -73,7 +82,27 @@ package assets
 					_rect.width * _SCALE,
 					_rect.height * _SCALE
 				);
+				*/
+				
+				var originalWidth:Number = _rect.width
+				_rect.width *= 0.7;
+				_rect.width = int(_rect.width);
+				_rect.x += (originalWidth - _rect.width) * 0.5;
+				
+				/*
+				var originalHeight:Number = _rect.height;
+				_rect.height *= 0.8;
+				_rect.y += (originalHeight - _rect.height) * 0.9;
+				*/
+				_faceWarp.drawFace(_rect);
+				_faceWarp.x = _rect.x;
+				_faceWarp.y = _rect.y;
+				_faceWarp.visible = true;
+			}else{
+				graphics.clear();
+				_faceWarp.visible = false;
 			}
+			addEventListener(Event.ENTER_FRAME, _onEnterFrameHandler);
 		}
 
 		protected override function atCastRemoved():void
@@ -90,6 +119,8 @@ package assets
 					_bitmap = null;
 					_bitmapData.dispose();
 					_bitmapData = null;
+					
+					_faceWarp = null;
 					
 					_rect = null;
 					

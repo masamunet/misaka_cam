@@ -1,5 +1,6 @@
 package pages
 {
+	import assets.Speech;
 	import assets.UserCamera;
 	
 	import jp.progression.casts.CastSprite;
@@ -9,6 +10,7 @@ package pages
 	public class IndexPage extends CastSprite
 	{
 		private var _camera:UserCamera;
+		private var _speech:Speech;
 		public function IndexPage(initObject:Object=null)
 		{
 			super(initObject);
@@ -18,12 +20,18 @@ package pages
 		protected override function atCastAdded():void
 		{
 			_camera = new UserCamera();
+			_speech = new Speech();
 			addCommand(
 				new AddChild(this, _camera),
 				function():void{
-					_camera.width = stage.stageWidth;
-					_camera.scaleY = _camera.scaleX;
-				}
+					_camera.height = stage.stageHeight;
+					_camera.scaleX = _camera.scaleY;
+					_camera.x = (stage.stageWidth - _camera.width) * 0.5;
+					
+					_camera.scaleX *= -1;
+					_camera.x += _camera.width;
+				},
+				new AddChild(this, _speech)
 			);
 		}
 

@@ -9,7 +9,7 @@ package {
 	 * ...
 	 * @author ...
 	 */
-	[SWF(backgroundColor="0xffffff",frameRate="30", width="800", height="600")]
+	[SWF(backgroundColor="0xffffff",frameRate="30", width="480", height="640")]
 	public class Index extends CastDocument {
 		
 		/**
