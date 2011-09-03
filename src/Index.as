@@ -26,10 +26,10 @@ package {
 		 */
 		override protected function atReady():void {
 			// 開発者用に Progression の動作状況を出力します。
-			Debugger.addTarget( manager );
+//			Debugger.addTarget( manager );
 			
 			// 外部同期機能を有効化します。
-			manager.sync = true;
+			manager.sync = false;
 			
 			// 最初のシーンに移動します。
 			manager.goto( manager.syncedSceneId );

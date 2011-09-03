@@ -33,7 +33,11 @@ package assets
 			images.push(new Image2());
 			images.push(new Image3());
 			addCommand(
-				new AddChild(this, images[int(Math.random() * images.length)])
+				new AddChild(this, images[int(Math.random() * images.length)]),
+				function():void{
+					width = stage.stageWidth;
+					height = stage.stageHeight;
+				}
 			);
 		}
 

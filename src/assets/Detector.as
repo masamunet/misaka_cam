@@ -51,6 +51,7 @@ package assets
 			_detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, _onCompleteHandler);
 			_detector.addEventListener(ObjectDetectorEvent.HAARCASCADES_LOAD_COMPLETE, _onLoadComplateHandler);
 			_detector.loadHaarCascades("face.zip");
+//			_detector.loadHaarCascades("http://utweb.jp//samples/misawacam/face.zip");
 			addCommand(
 				new AddChild(this, _faceWarp)
 			);
